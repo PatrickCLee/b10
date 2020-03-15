@@ -134,4 +134,14 @@ public class MainActivity extends AppCompatActivity {
             Log.v("brad",e.toString());
         }
     }
+
+    public void test5(View view) {
+        File ringDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES);//此為共用的資料
+        if(ringDir.exists() && ringDir.isDirectory()){
+            File[] rings = ringDir.listFiles();
+            for(File ring : rings){
+                Log.v("brad",ring.getAbsolutePath());
+            }
+        }
+    }
 }
