@@ -12,12 +12,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
-
-    @Override
+    private File sdroot, approot;//參考手機照片,此處sdroot是外存,approot是存在app之下的
+    @Override                   //以lg手機來說 sdroot在storage/emulated/legacy底下
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,15 +70,68 @@ public class MainActivity extends AppCompatActivity {
     private void init() {//有權限需求時,可將本來要放在onCreate的code放在init,等到同意權限時才執行
         String state = Environment.getExternalStorageState();
         Log.v("brad", state);  // mounted or removed 掛載或移除
-        File sdroot = Environment.getExternalStorageDirectory();
+        sdroot = Environment.getExternalStorageDirectory();
         Log.v("brad",sdroot.getAbsolutePath());
+        approot = new File(sdroot,"Android/data/" + getPackageName());
+        if(!approot.exists()){
+            approot.mkdirs();
+        }
     }
 
     public void test1(View view) {
-
+        try {
+            FileOutputStream fout =
+                    new FileOutputStream(sdroot.getAbsolutePath()+"/001.txt");
+            fout.write("CCCCCCC".getBytes());
+            fout.flush();
+            fout.close();
+            Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.v("brad",e.toString());
+        }
     }
 
     public void test2(View view) {
+        try {
+            FileOutputStream fout =
+                    new FileOutputStream(approot.getAbsolutePath()+"/001.txt");
+            fout.write("double d".getBytes());
+            fout.flush();
+            fout.close();
+            Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.v("brad",e.toString());
+        }
+    }
 
+    public void test3(View view) {
+        try {
+            FileInputStream fin =
+                    new FileInputStream(sdroot.getAbsolutePath()+"/001.txt");
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(fin));
+            String line = reader.readLine();
+            fin.close();
+            Log.v("brad",line);
+
+        }catch (Exception e){
+            Log.v("brad",e.toString());
+        }
+
+    }
+
+    public void test4(View view) {
+        try {
+            FileInputStream fin =
+                    new FileInputStream(approot.getAbsolutePath()+"/001.txt");
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(fin));
+            String line = reader.readLine();
+            fin.close();
+            Log.v("brad",line);
+
+        }catch (Exception e){
+            Log.v("brad",e.toString());
+        }
     }
 }
