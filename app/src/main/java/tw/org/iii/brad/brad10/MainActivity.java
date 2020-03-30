@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this,//檢查是否拿到權限
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-
+            Log.v("brad","checkPermission: not granted");
             // Permission is not granted
 
             // No explanation needed; request the permission
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 123) {
+            Log.v("brad",requestCode+":"+permissions[0]+":"+grantResults[0]);
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.v("brad", "debug2");//獲得授權
                 init();
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fout =
                     new FileOutputStream(sdroot.getAbsolutePath()+"/001.txt");
-            fout.write("CCCCCCC".getBytes());
+            fout.write("CCCCCCC sdroot".getBytes());
             fout.flush();
             fout.close();
             Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fout =
                     new FileOutputStream(approot.getAbsolutePath()+"/001.txt");
-            fout.write("double d".getBytes());
+            fout.write("double d approot".getBytes());
             fout.flush();
             fout.close();
             Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
